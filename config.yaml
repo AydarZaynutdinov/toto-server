@@ -1,0 +1,23 @@
+app:
+  name: toto
+  port: PORT
+  host: HOST
+  description: Mock server
+  uri: /api/v1
+  environment: dev
+  version: dev
+logger:
+  level: 0
+  time_show: true
+  time_format: 2006-01-02 15:04:05.000
+db:
+  driver: pgx
+  host: DB_HOST
+  port: DB_PORT
+  username: DB_USERNAME
+  password: DB_PASSWORD
+  database: DB_DATABASE
+redis:
+  address: REDIS_ADDRESS
+migrations:
+  dir: migrations/

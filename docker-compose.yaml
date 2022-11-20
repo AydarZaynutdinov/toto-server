@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgres-toto:
+    container_name: postgres-toto
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    restart: unless-stopped
+  redis-toto:
+    container_name: redis-toto
+    image: redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+  toto-server:
+    container_name: toto-server
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    image: "toto-server:latest"
+    environment:
+      PORT: ${PORT}
+      HOST: ${HOST}
+      DB_HOST: postgres-toto
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      REDIS_ADDRESS: redis-toto:${REDIS_PORT}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./../toto-server/config.yaml:/app/config.yaml
+    depends_on:
+      - postgres-toto
+      - redis-toto
+    links:
+      - postgres-toto
+      - redis-toto
+
+volumes:
+  db:
+    driver: local
+  redis-data:

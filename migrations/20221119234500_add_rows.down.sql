@@ -1,0 +1,1 @@
+DELETE FROM sku_configs WHERE true;

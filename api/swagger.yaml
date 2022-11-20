@@ -1,0 +1,59 @@
+swagger: '2.0'
+info:
+  title: toto
+  description: Mock server
+  version: 1.0.0
+host: 127.0.0.1
+schemes:
+  - http
+produces:
+  - application/json
+consumes:
+  - application/json
+basePath: "/api/v1"
+paths:
+  /main_sku:
+    get:
+      tags:
+        - "sku_config"
+      summary: "Get main_sku"
+      parameters:
+        - in: query
+          name: package
+          type: string
+          description: Identifier of the calling app
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/SuccessfulMainSku"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+definitions:
+  SuccessfulMainSku:
+    type: object
+    properties:
+      main_sku:
+        type: string
+        description: The subscription offer id (sku)
+    example:
+      main_sku: rdm_premium_v2_002_trial_7d_monthly
+  ErrorResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        description: error message
+    example:
+      message: incorrect request parameter
